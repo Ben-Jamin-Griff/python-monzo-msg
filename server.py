@@ -88,19 +88,17 @@ def token():
 
 @app.route('/hook', methods=['POST'])
 def hook():
-    # Log the request headers
-    #logger.info(f"Headers: {request.headers}")
-
-    # Log the request data
     if request.is_json:
         data = request.get_json()
     else:
         data = request.data
-        
+    
+    logger.info(f"Headers: {request.headers}")        
+    logger.info(f"JSON payload: {data}")
+    
     if data['type'] == 'transaction.created':
         if data['data']['id'] not in event_ids:
             event_ids.append(data['data']['id'])
-            logger.info(f"JSON payload: {data}")
             
             moved_amount = abs(int(data['data']['amount']/100))
             
